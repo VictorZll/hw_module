@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 import java.net.InetSocketAddress;
 
 @Component
-@Order(value = 1200)
-public  class MinaServerStr extends Thread{
+public  class MinaServerStr  extends Thread {
     private int PORT=28899;//18899
     private IoAcceptor ioAcceptor=null;
 
@@ -40,7 +39,7 @@ public  class MinaServerStr extends Thread{
         }
         ioAcceptor.setHandler(serviceHandlerStr);
         try {
-            ioAcceptor.bind(new InetSocketAddress(Integer.parseInt(Thread.currentThread().getName())));
+            ioAcceptor.bind(new InetSocketAddress(PORT));
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("IO异常！！！！！！！！！");
@@ -49,7 +48,5 @@ public  class MinaServerStr extends Thread{
         System.out.println("Server=>"+Integer.parseInt(Thread.currentThread().getName()));
     }
 
-    public static void main(String[] args) {
 
-    }
 }
