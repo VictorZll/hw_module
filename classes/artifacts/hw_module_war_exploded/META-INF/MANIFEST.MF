@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: hw_module
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: zhululu
+Implementation-Vendor-Id: com.suree
+Created-By: IntelliJ IDEA
+Build-Jdk: 1.8.0_231
+Main-Class: ${start-class}
+

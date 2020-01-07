@@ -97,12 +97,14 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
             System.out.println(msg1.contains(":"));
 
             if(msg1.contains(":")){
-                String[] strArr3= msg1.split(":");
-                String phone=strArr3[0];
+                String phone=msg1.split("\\:")[0];
+                String tel=msg1.split("\\:")[1];
+                System.out.println(phone);
                 Map<String,IoSession> map=new HashMap<>();
-                maps.put("tel",strArr3[0]);
-                maps.put("time",strArr3[1]);
-                DeviceMap.newInstance().put(phone , maps);//根据phone卡号判断
+                Map<String,Object> mapss=new HashMap<>();
+                mapss.put("tel",phone);
+                mapss.put("time",tel);
+                DeviceMap.newInstance().put(phone , mapss);//根据phone卡号判断
                 System.out.println(DeviceMap.newInstance().get(phone)+"llll");
                 map.put(phone,session);
                 if(SessionMap.newInstance().get(phone)!=null){
@@ -112,58 +114,9 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
             }
 
 
-
-
-                msg1+=",0,0,0,0,0";//解决协议改变，包长不够的问题   ------》不管是什么协议，补充10位，防止出现空指针报错
-
-
-
-            //存储传感器数据
-            Calendar calendar=Calendar.getInstance();
-            String year = calendar.get(Calendar.YEAR)+"";
-            String month = DataHandleUtils.addNZero(calendar.get(Calendar.MONTH)+1+"",2) ;
-            String day = DataHandleUtils.addNZero(calendar.get(Calendar.DAY_OF_MONTH)+"",2);
-            Map<String,Object> mapss=new HashMap<>();
-            mapss.put(Constants.sdf.format(new Date()),msg1);//保留原始数据
-            if(msg1.split(",")[0]!=null&&msg1.split(",")[0].length()==4&&msg1.split(",")[1]!=null&&msg1.split(",")[1].length()==20){
-                GPSFilesHandlerUtils.writeFiles("C:\\GPS定位文件\\historySensor\\"+year+"\\"+month+"\\"+day+"\\", msg1.split(",")[0]+"_"+msg1.split(",")[1]+"_log.txt", mapss);
-            }
-
-
-//            //将接收到的消息放到map集合
-            String[] strArr2 = msg1.split(",");
-
-            maps = deCodeBootLoader(strArr2, msg1, clientIP, clientPort);
-
-            if(maps!=null){  //去除空指针
-                log.info("maps---"+maps);
-                String phone=maps.get("phone").toString();
-                DeviceMap.newInstance().put(phone , maps);//根据phone卡号判断
-//            if(SessionMap.newInstance().get(phone)==null){
-////                Map<String,IoSession> map=new HashMap<>();
-////                map.put(phone,session);
-////                SessionMap.newInstance().put(phone,map);
-////            }
-                Map<String,IoSession> map=new HashMap<>();
-                map.put(phone,session);
-                if(SessionMap.newInstance().get(phone)!=null){
-                    SessionMap.newInstance().remove(phone);
-                }
-                SessionMap.newInstance().put(phone , map);//把接收数据的卡号作为key，并新建一个session
-//            if(SessionMap.newInstance().get(phone).get(phone )!=null){//删除单利中重复的数据
-//                SessionMap.newInstance().get(phone).remove(phone);
-//                SessionMap.newInstance().get(phone).put(phone  , session);
-//            }
-//                log.info(msg1+"----正常解析--停滞时间"+maps.get("stoptime"));
-            }
-
         } catch (Exception e) {
  //           System.out.println(msg1+"数据不合理，不解析");//包长报错，坐标报错---直接跳过
-//            if(!Constants.isOnline){
               e.printStackTrace();
-//           }
-  //         System.out.println(e.toString());
-//            throw e;
         }
 
 //        System.out.println("messageReceived 执行完毕" + clientIP);

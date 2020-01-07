@@ -8,6 +8,7 @@ class HwModuleApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("123456789111:10".split("\\:")[0]);
 	}
 
 }
