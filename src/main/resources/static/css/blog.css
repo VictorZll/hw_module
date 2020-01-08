@@ -1,0 +1,40 @@
+.picture {
+    margin-top: -20px;
+    padding-bottom: 20px;
+}
+
+.picture .thumbnail img {
+    border: 1px solid white;
+}
+
+.picture .thumbnail .caption p {
+    text-indent: 2em;
+}
+
+.picture .thumbnail .caption .text-left {
+    display: inline-block;
+    color: red;
+    margin-left: 10px;
+}
+
+.picture .thumbnail .caption .text-left span {
+    padding-left: 10px;
+}
+
+.picture .thumbnail .caption .text-left i {
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+.picture .thumbnail .caption .text-right .btn {
+    background: #cb81b5;
+    color: white;
+}
+
+.picture .thumbnail .caption .text-right .btn:hover {
+    background: orange;
+}
+
+.picture .active {
+    background: linear-gradient(to top, rgba(191, 200, 255, 0.34), white);
+}

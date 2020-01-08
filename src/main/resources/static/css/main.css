@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.header {
+    border-radius: 0;
+    margin-bottom: 0;
+    background: #5999f2;
+    height: 80px;
+}
+
+#top-self {
+    height: 8%;
+}
+
+.header .container {
+    width: 100%;
+}
+
+.header .badge {
+    background: #eeb24d;
+}
+
+.header .navbar-header {
+    position: relative;
+}
+
+.header .navbar-header h3 {
+    color: white;
+    font-size: 30px;
+}
+
+.header .navbar-header a {
+    right: 0;
+    top: 8px;
+    background: blue;
+    position: absolute;
+}
+
+.header .navbar-header a i {
+    width: 30px;
+    height: 30px;
+    display: block;
+    background: #eee;
+    line-height: 30px;
+    transition: transform 0.2s 1s;
+}
+
+.header .navbar-collapse {
+    position: relative;
+}
+
+.header .navbar-collapse .nav {
+    height: 44px;
+    position: absolute;
+    top: 30px;
+    right: 0;
+}
+
+.header .navbar-collapse p {
+    top: 0;
+    right: 0;
+    position: absolute;
+    width: 200px;
+    height: 30px;
+    padding: 10px;
+    float: right;
+    color: white;
+}
+
+.header .navbar-collapse a {
+    color: white;
+
+}
+
+/*.header .navbar-collapse a:hover {*/
+/*  color: #8890ff;*/
+/*  transition: color 0.4s;*/
+/*  background: #5999f2;*/
+/*}*/
+/*.header .navbar-collapse .active {*/
+/*  color: #2129ff;*/
+/*}*/
+
+@media screen and (min-width: 768px) {
+    .right {
+        display: block;
+    }
+
+    .clothes > ul {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main_box .main .cont {
+        padding-left: 50px !important;
+    }
+
+    .main_box .main .cont .form-zhuce .input-group {
+        width: 260px;
+    }
+
+    .main_box .main .cont .yanz .btn {
+        left: 200px !important;
+    }
+
+    .louti {
+        display: none !important;
+    }
+
+    .header input {
+        margin-left: 16px !important;
+    }
+
+    .header input + a {
+        display: none;
+    }
+
+    .logo .navbar-header .navbar-brand {
+        margin-left: 16px;
+    }
+
+    .footer .row {
+        padding: 0 20px;
+    }
+
+    .footer .f .friend {
+        border-top: 1px dashed white;
+        border-bottom: 1px dashed white;
+        height: 30px;
+        overflow: hidden;
+    }
+
+    .footer .f span {
+        margin-left: 10px;
+    }
+}

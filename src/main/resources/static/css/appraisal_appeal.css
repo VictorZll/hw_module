@@ -1,0 +1,74 @@
+
+.box {
+    height: 500px;
+    width: 100%;
+}
+
+.left, .right {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.menu {
+    padding: 20px;
+}
+
+.menu h4 {
+    font-size: 16px;
+    text-indent: 1em;
+    padding-bottom: 12px;
+    border-bottom: 2px solid red;
+}
+
+.left > ul {
+    list-style: none;
+    margin-left: -20px;
+}
+
+.left > ul li {
+    margin: 6px 0;
+}
+
+.left > ul li:nth-of-type(even) {
+    background: #d9d9d9;
+}
+
+.left > ul li:nth-of-type(3) span {
+    color: #5cb424;
+}
+
+.left > div {
+    margin-left: 20px;
+    border: 1px solid;
+    padding: 20px;
+}
+
+.left > div .r1 {
+    margin-top: -20px;
+}
+
+.left > div .r1 div {
+    padding: 12px;
+}
+
+.left > div .r1 div:last-of-type {
+    background: #d9d9d9;
+}
+
+.left > div .r2, .left > div .r3 {
+    background: #d9d9d9;
+    margin: 8px 2px;
+}
+
+.left > div + p {
+    margin-left: 20px;
+    margin-top: 16px;
+}
+
+.right {
+}
+
+.right .form-group + p {
+    padding-left: 76px;
+}

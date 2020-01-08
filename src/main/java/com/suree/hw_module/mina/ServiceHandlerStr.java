@@ -94,18 +94,34 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
 //        System.out.println("------------------------->"+msg);
         try {
             System.out.println("msg1--"+msg1);
-            System.out.println(msg1.contains(":"));
+
+            Map<String,Object> mapss=new HashMap<>();
+            if(msg1.contains(",")){
+                mapss.put("appText",msg1);
+            }
 
             if(msg1.contains(":")){
                 String phone=msg1.split("\\:")[0];
                 String tel=msg1.split("\\:")[1];
                 System.out.println(phone);
                 Map<String,IoSession> map=new HashMap<>();
-                Map<String,Object> mapss=new HashMap<>();
-                mapss.put("tel",phone);
+
+                if(tel.contains(".")&&tel.split("\\.").length==4){
+                    mapss.put("ServerIP",tel);
+                }
+                if(tel.contains(".")&&tel.split("\\.").length==3){
+                    mapss.put("Version",tel);
+                }
+                if(tel.length()==20){
+                    mapss.put("tel",tel);
+                }
+                if(tel.length()<=5&&tel.length()>=4){
+                    mapss.put("ServerPORT",tel);
+                }
                 mapss.put("time",tel);
+                mapss.put("ClientIP",clientIP);
+                mapss.put("ClientPORT",clientPort);
                 DeviceMap.newInstance().put(phone , mapss);//根据phone卡号判断
-                System.out.println(DeviceMap.newInstance().get(phone)+"llll");
                 map.put(phone,session);
                 if(SessionMap.newInstance().get(phone)!=null){
                     SessionMap.newInstance().remove(phone);

@@ -1,8 +1,7 @@
 package com.suree.hw_module.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,13 +55,19 @@ public class APPHandles {
     }
 
     public static void main(String[] args) {
-        File f=new File("C:\\Users\\shinelon\\Desktop\\APP.bin");
+        System.out.println(15424%1024);
+        File f=new File("C:\\Users\\Administrator\\Desktop\\APP(3).bin");
         try {
             InputStream in=new FileInputStream(f);
-            List<String> list=readBinApp(in);
+            int size=(int) f.length();
+//            System.out.println("size---"+size);
+//            System.out.println("size---"+size/1024);
+//            System.out.println("size---"+size%1024);
+            List<String> list=readBinApp(in,size);
             int i=0;
             list.forEach(l->{
-                System.out.println(":"+l);
+//                System.out.println(l);
+//                System.out.println(":"+l.replaceAll(" ","").length());
             });
 //            System.out.println("--"+readBinApp(in).get(1).length()+":"+readBinApp(in).get(1));
         }catch (Exception e){
@@ -71,26 +76,54 @@ public class APPHandles {
 
     }
 
-    public static List<String> readBinApp(InputStream in){
+    public static List<String> readBinApp(InputStream in,int size){
         List<String> res=new ArrayList<>();
         StringBuilder sb=new StringBuilder();
         byte[] b=new byte[1024];
         int n=0;
+        int len=0;
+        int lastLine=size%1024;
+        System.out.println("lastLine="+lastLine);
         try {
-            while (in.read(b)!=-1){
-                for (int i=0;i<b.length;i++){
-                    System.out.print(intToHex((b[i]& 0xff))+" ");
-                    sb.append(intToHex((b[i]& 0xff))+" ");
-                    n++;
-                    if(n%10317==0){
-                        res.add(sb.toString());
-                        sb=new StringBuilder();
-                        System.out.println("开始分包");
+            while ((len=in.read(b,0,b.length))!=-1){
+//                System.out.println();
+//                System.out.println(n);
+//                System.out.println("len--"+len);
+//                if(n%10==0&&n!=0){
+                if(n==15){
+                    res.add(sb.toString());
+                    sb=new StringBuilder();
+                    System.out.println("开始分包");
+                    for (int i=0;i<b.length;i++){
+                        System.out.print(intToHex((b[i]& 0xff))+" ");
+                        sb.append(intToHex((b[i]& 0xff))+" ");
+                    }
+                }else {
+                    if(n==size/1024){
+                        for (int i=0;i<b.length;i++){
+                            if(i<lastLine){
+                                System.out.print(intToHex((b[i]& 0xff))+" ");
+                                sb.append(intToHex((b[i]& 0xff))+" ");
+                            }
+                        }
+                    }else{
+                        System.out.println("b.length--->"+b.length);
+                        for (int i=0;i<b.length;i++){
+                            System.out.print(intToHex((b[i]& 0xff))+" ");
+                            sb.append(intToHex((b[i]& 0xff))+" ");
+                        }
                     }
                 }
+
+                n++;
+
             }
+            System.out.println("n--->"+n);
             res.add(sb.toString());
             System.out.println("分包完成");
+            if(in!=null){
+                in.close();
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

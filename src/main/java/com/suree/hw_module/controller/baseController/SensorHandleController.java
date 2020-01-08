@@ -1,6 +1,7 @@
 package com.suree.hw_module.controller.baseController;
 
 import com.suree.hw_module.constant.Constants;
+import com.suree.hw_module.entity.Sensor;
 import com.suree.hw_module.mina.DeviceMap;
 import com.suree.hw_module.mina.singleton.PackageMap;
 import com.suree.hw_module.mina.singleton.SessionMap;
@@ -10,6 +11,7 @@ import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletInputStream;
@@ -49,7 +51,6 @@ public class SensorHandleController {
             session.write(IoBuffer.wrap(bytes));
 
     }
-
     private void handleData1(String msg){
         Map<String, Map<String, IoSession>> stringMapMap = SessionMap.newInstance();
         for (String k:stringMapMap.keySet()){
@@ -72,9 +73,6 @@ public class SensorHandleController {
             byte[] bytess = new byte[cmds.length];
             int i=0;
             for(String b : cmds){
-                if(b.equals("5A")||b.equals("A5")){
-                    continue;
-                }
 
                 if(b.equals("FF")){
                     bytess[i++] = -1;
@@ -87,7 +85,85 @@ public class SensorHandleController {
             session.write(IoBuffer.wrap(bytes));
         }
 
+    }
+
+    private void handleOneData1(String tel,String msg){
+        Map<String, Map<String, IoSession>> stringMapMap = SessionMap.newInstance();
+            IoSession session=SessionMap.newInstance().get(tel).get(tel);
+            StringBuilder msg1=new StringBuilder();
+            byte[] bytes=msg.getBytes();
+            for (int i=0;i<bytes.length;i++){
+                byte b=bytes[i];
+                Integer.toHexString(b);
+                msg1.append(Integer.toHexString(b)+" ");
+            }
+            msg1.substring(0,msg1.length()-1);
+            System.out.println( msg1.toString()+"msg1");
+
+            if(session == null){
+                System.out.println("session为null");
+                return;
+            }
+            String[] cmds = (msg1.toString()).split(" ");
+            byte[] bytess = new byte[cmds.length];
+            int i=0;
+            for(String b : cmds){
+                if(b.equals("FF")){
+                    bytess[i++] = -1;
+                }else{
+                    bytess[i++] = Byte.parseByte(b, 16);
+                }
+            }
+
+            System.out.println("消息的长度是： " + i);
+            session.write(IoBuffer.wrap(bytes));
+
+
+    }
+
+    @RequestMapping("/listForm")
+    public List<Sensor> listForm(){
+//        Sensor sensor=new Sensor();
+//        sensor.setClientIP("192.168.123.1");
+//        sensor.setClientPORT("57741");
+//        sensor.setServerIP("192.168.5.123");
+//        sensor.setServerPORT("28899");
+//        sensor.setTel("12345678911");
+//        sensor.setBootloaderTIMER("8s");
+//        sensor.setVersion("v2.0.1");
+        List<Sensor> list =new ArrayList<>();
+        Map<String,Object> deviceMap = DeviceMap.newInstance();
+        for (String k:deviceMap.keySet()){
+            Sensor sensor=new Sensor();
+            Map<String,String> map =(Map<String,String>) deviceMap.get(k);
+            if(!StringUtils.isEmpty(map.get("time"))){
+                sensor.setBootloaderTIMER(map.get("time"));
+            }
+            if(!StringUtils.isEmpty(map.get("ClientIP"))){
+                sensor.setClientIP(map.get("ClientIP"));
+            }
+            if(!StringUtils.isEmpty(map.get("ClientPORT"))){
+                sensor.setClientPORT(map.get("ClientPORT"));
+            }
+            if(!StringUtils.isEmpty(map.get("ServerIP"))){
+                sensor.setServerIP(map.get("ServerIP"));
+            }
+            if(!StringUtils.isEmpty(map.get("ServerPORT"))){
+                sensor.setServerPORT(map.get("ServerPORT"));
+            }
+            if(!StringUtils.isEmpty(map.get("Version"))){
+                sensor.setVersion(map.get("Version"));
+            }
+            if(!StringUtils.isEmpty(map.get("appText"))){
+                sensor.setAppText(map.get("appText"));
+            }
+            sensor.setTel(k);
+
+            Collections.addAll(list,sensor);
         }
+        return list;
+    }
+
 
 
     @RequestMapping("/listSensor")
@@ -128,30 +204,39 @@ public class SensorHandleController {
 
 
     @RequestMapping("/ipHandle")
-    public Map<String,Object> setIp(String ip,boolean set){
+    public Map<String,Object> setIp(@RequestParam(required = false)String ip,@RequestParam(required = false)String tel, boolean set){
         String msg="";
         if(set){
             msg="IP"+ip;
         }else {
             msg="RIP";
         }
-        handleData1(msg);
+        if(StringUtils.isEmpty(tel)){
+            handleData1(msg);
+        }else {
+            handleOneData1(tel,msg);
+        }
+
         Map<String,Object> res=new HashMap<>();
-        res.put("status","1");
+        res.put("status",1);
         return res;
     }
 
     @RequestMapping("/portHandle")
-    public Map<String,Object> setPort(String port,boolean set){
+    public Map<String,Object> setPort(@RequestParam(required = false)String port,@RequestParam(required = false)String tel, boolean set){
         String msg="";
         if(set){
              msg="PORT"+port;
         }else {
             msg="RPORT";
         }
-        handleData1(msg);
+        if(StringUtils.isEmpty(tel)){
+            handleData1(msg);
+        }else {
+            handleOneData1(tel,msg);
+        }
         Map<String,Object> res=new HashMap<>();
-        res.put("status","1");
+        res.put("status",1);
         return res;
     }
 
@@ -159,7 +244,8 @@ public class SensorHandleController {
     public void uploadAPPBin(HttpServletRequest request){
         try {
             Part app = request.getPart("APP");
-            List<String> list=APPHandles.readBinApp(app.getInputStream());
+            List<String> list=APPHandles.readBinApp(app.getInputStream(),(int) app.getSize());
+            System.out.println( app.getSize());
             System.out.println("list"+list);
             System.out.println("0"+list.get(0));
             for (int i=0;i<list.size();i++){
@@ -172,7 +258,7 @@ public class SensorHandleController {
     }
 
     @RequestMapping("/sendUPDATE")
-    public Map<String,Object> sendUPDATE(String udt){
+    public Map<String,Object> sendUPDATE(String udt,@RequestParam(required = false) String tel){
         Map<String,Object> map=new HashMap<>();
         Map<String, Map<String, IoSession>> stringMapMap = SessionMap.newInstance();
         int size = stringMapMap.size();
@@ -180,14 +266,17 @@ public class SensorHandleController {
         if(size<1){
             map.put("status",0);
         }else {
-            handleData1(udt);
-
+            if(StringUtils.isEmpty(tel)){
+                handleData1(udt);
+            }else {
+                handleOneData1(tel,udt);
+            }
         }
         return map;
     }
 
     @RequestMapping("/sendAppPack")
-    public Map<String,Object> sendAppPack(String pack){
+    public Map<String,Object> sendAppPack(String pack,@RequestParam(required = false) String tel){
         Map<String,Object> map=new HashMap<>();
         Map<String, Map<String, IoSession>> stringMapMap = SessionMap.newInstance();
         int size = PackageMap.newInstance().keySet().size();
@@ -196,9 +285,14 @@ public class SensorHandleController {
             map.put("status",0);
         }else {
             String msg=(String) PackageMap.newInstance().get(Integer.parseInt(pack)-1);
-            for (String k:stringMapMap.keySet()){
-                sendApp(msg,stringMapMap.get(k).get(k));
+            if(StringUtils.isEmpty(tel)){
+                for (String k:stringMapMap.keySet()){
+                    sendApp(msg,stringMapMap.get(k).get(k));
+                }
+            }else {
+                sendApp(msg,stringMapMap.get(tel).get(tel));
             }
+
         }
 
         return map;
