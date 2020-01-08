@@ -479,8 +479,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
             }
         });
+        // $("#dg").bootstrapTable("destroy");
+        // TableObj.oTableInit();
+
+
+
+        // $("#dg").bootstrapTable("refresh");
         // queryAll();
-    },100)
+        $("#dg").bootstrapTable("refresh", {
+            silent: true //静态刷新
+        })
+    },600)
+
+
     // function queryAll() {
     //     updateRealTimeData();
     // }

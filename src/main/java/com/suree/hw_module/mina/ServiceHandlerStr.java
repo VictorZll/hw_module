@@ -11,6 +11,7 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.net.InetSocketAddress;
 import java.text.DateFormat;
@@ -91,45 +92,59 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
 //                System.out.println(new String(b)+"-------------------->str");
             msg1 = msg1 + new String(b);
         }
-//        System.out.println("------------------------->"+msg);
         try {
             System.out.println("msg1--"+msg1);
+            String appText="";
+            String tel1="";
+            String ServerIP="";
+            String Version="";
+            String ServerPORT="";
+            String time="";
 
-            Map<String,Object> mapss=new HashMap<>();
+            //APP协议包
             if(msg1.contains(",")){
-                mapss.put("appText",msg1);
+                 tel1=msg1.split(",")[1];
+                if(!StringUtils.isEmpty(tel1)&&tel1.length()==20){
+                    appText=msg1;
+                }
             }
-
+            //boot loader协议包
             if(msg1.contains(":")){
                 String phone=msg1.split("\\:")[0];
                 String tel=msg1.split("\\:")[1];
-                System.out.println(phone);
-                Map<String,IoSession> map=new HashMap<>();
-
-                if(tel.contains(".")&&tel.split("\\.").length==4){
-                    mapss.put("ServerIP",tel);
+                if(!StringUtils.isEmpty(phone)&&phone.length()==20){
+                    tel1=phone;
+                    if(tel.contains(".")&&tel.split("\\.").length==4){
+                        ServerIP=tel;
+                    }
+                    if(tel.contains(".")&&tel.split("\\.").length==3){
+                        Version=tel;
+                    }
+                    if(tel.length()<=5&&tel.length()>=4){
+                        ServerPORT=tel;
+                    }
+                    if(tel.length()<=2){
+                        time=tel;
+                    }
                 }
-                if(tel.contains(".")&&tel.split("\\.").length==3){
-                    mapss.put("Version",tel);
-                }
-                if(tel.length()==20){
-                    mapss.put("tel",tel);
-                }
-                if(tel.length()<=5&&tel.length()>=4){
-                    mapss.put("ServerPORT",tel);
-                }
-                mapss.put("time",tel);
-                mapss.put("ClientIP",clientIP);
-                mapss.put("ClientPORT",clientPort);
-                DeviceMap.newInstance().put(phone , mapss);//根据phone卡号判断
-                map.put(phone,session);
-                if(SessionMap.newInstance().get(phone)!=null){
-                    SessionMap.newInstance().remove(phone);
-                }
-                SessionMap.newInstance().put(phone , map);//把接收数据的卡号作为key，并新建一个session
             }
 
-
+            //创建单例
+            if(!StringUtils.isEmpty(tel1)&&tel1.length()==20){
+                Map<String,IoSession> map=new HashMap<>();
+                Map<String,Object> mapss=new HashMap<>();
+                mapss.put("ClientIP",clientIP);
+                mapss.put("ClientPORT",clientPort);
+                mapss.put("time",time);
+                mapss.put("ServerPORT",ServerPORT);
+                mapss.put("Version",Version);
+                mapss.put("ServerIP",ServerIP);
+                mapss.put("tel",tel1);
+                mapss.put("appText",appText);
+                DeviceMap.newInstance().put(tel1 , mapss);//根据phone卡号判断
+                map.put(tel1,session);
+                SessionMap.newInstance().put(tel1 , map);//把接收数据的卡号作为key，并新建一个session
+            }
         } catch (Exception e) {
  //           System.out.println(msg1+"数据不合理，不解析");//包长报错，坐标报错---直接跳过
               e.printStackTrace();
