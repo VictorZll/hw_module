@@ -5,13 +5,16 @@ import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 
 @Component
-public  class MinaServerStr  extends Thread {
+@Order(15000)
+public  class MinaServerStr  implements ApplicationRunner {
     private int PORT=28899;//18899
     private IoAcceptor ioAcceptor=null;
 
@@ -24,7 +27,7 @@ public  class MinaServerStr  extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run(ApplicationArguments args) throws Exception {
         ioAcceptor=new NioSocketAcceptor();
         //设置过滤器,编解码
         ioAcceptor.getFilterChain().addLast("codecFilter",new ProtocolCodecFilter(new MyProtocolCodecFactory(6)
@@ -45,8 +48,13 @@ public  class MinaServerStr  extends Thread {
             System.out.println("IO异常！！！！！！！！！");
         }
 
-        System.out.println("Server=>"+Integer.parseInt(Thread.currentThread().getName()));
+        System.out.println("Server=>"+PORT);
     }
+
+//    @Override
+//    public void run() {
+//
+//    }
 
 
 }
