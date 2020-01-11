@@ -46,6 +46,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         <input  style="display:inline" type="file" name="APP" placeholder="选择APP二进制文件"   />
         <input type="submit"  value="点击上传APP" />
     </form>
+    <button class="reset">发送指令按钮</button>
     <button class="udt1">UPDATE1</button>
     <button class="btn1">发送包PACK1</button>
     <button class="udt2">UPDATE2</button>
@@ -71,6 +72,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <div id="dg"></div>
 </body>
 <script>
+    $(".reset").click(function () {
+        var a=prompt("请输入指令","***");
+        $.post("sensor/handle/handleStr",{str:a},function (data) {
+            if(data.status==1){
+                alert("操作成功！")
+            }else {
+                alert("操作失败！")
+            }
+        },"json");
+    });
     //页面加锁
     // $(function () {
     //     var a=null;

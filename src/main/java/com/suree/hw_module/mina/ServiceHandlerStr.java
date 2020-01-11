@@ -103,7 +103,7 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
 
             //APP协议包
             if(msg1.contains(",")){
-                 tel1=msg1.split(",")[1];
+                 tel1=msg1.split(",")[0];
                 if(!StringUtils.isEmpty(tel1)&&tel1.length()==20){
                     appText=msg1;
                 }

@@ -24,6 +24,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/sensor/handle")
 public class SensorHandleController {
+
     private void sendApp( Object message,IoSession session){
 
             System.out.println("反向发送消息到客户端Session---" + "----------APP=" + message);
@@ -202,6 +203,14 @@ public class SensorHandleController {
 
     }
 
+    @RequestMapping("/handleStr")
+    public Map<String,Object> handleStr(String str){
+        String msg=str;
+        handleData1(msg.trim());
+        Map<String,Object> res=new HashMap<>();
+        res.put("status",1);
+        return res;
+    }
 
     @RequestMapping("/ipHandle")
     public Map<String,Object> setIp(@RequestParam(required = false)String ip,@RequestParam(required = false)String tel, boolean set){
