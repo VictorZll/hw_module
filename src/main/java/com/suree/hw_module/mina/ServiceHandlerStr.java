@@ -94,6 +94,7 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
         }
         try {
             System.out.println("msg1--"+msg1);
+            GPSFilesHandlerUtils.writeFile("C:\\GPS定位文件\\history\\", "new_log.txt", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-->"+msg1+"\r\n");
             String appText="";
             String tel1="";
             String ServerIP="";
