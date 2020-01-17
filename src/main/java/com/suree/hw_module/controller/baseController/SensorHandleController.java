@@ -134,34 +134,49 @@ public class SensorHandleController {
 //        sensor.setVersion("v2.0.1");
         List<Sensor> list =new ArrayList<>();
         Map<String,Object> deviceMap = DeviceMap.newInstance();
-        for (String k:deviceMap.keySet()){
-            Sensor sensor=new Sensor();
-            Map<String,String> map =(Map<String,String>) deviceMap.get(k);
-            if(!StringUtils.isEmpty(map.get("time"))){
+        for (String k:deviceMap.keySet()) {
+            Sensor sensor = new Sensor();
+            Map<String, String> map = (Map<String, String>) deviceMap.get(k);
+            if (!StringUtils.isEmpty(map.get("time"))) {
                 sensor.setBootloaderTIMER(map.get("time"));
             }
-            if(!StringUtils.isEmpty(map.get("ClientIP"))){
+            if (!StringUtils.isEmpty(map.get("ClientIP"))) {
                 sensor.setClientIP(map.get("ClientIP"));
             }
-            if(!StringUtils.isEmpty(map.get("ClientPORT"))){
+            if (!StringUtils.isEmpty(map.get("ClientPORT"))) {
                 sensor.setClientPORT(map.get("ClientPORT"));
             }
-            if(!StringUtils.isEmpty(map.get("ServerIP"))){
+            if (!StringUtils.isEmpty(map.get("ServerIP"))) {
                 sensor.setServerIP(map.get("ServerIP"));
             }
-            if(!StringUtils.isEmpty(map.get("ServerPORT"))){
+            if (!StringUtils.isEmpty(map.get("ServerPORT"))) {
                 sensor.setServerPORT(map.get("ServerPORT"));
             }
-            if(!StringUtils.isEmpty(map.get("Version"))){
+            if (!StringUtils.isEmpty(map.get("Version"))) {
                 sensor.setVersion(map.get("Version"));
             }
-            if(!StringUtils.isEmpty(map.get("appText"))){
+            if (!StringUtils.isEmpty(map.get("appText"))) {
                 sensor.setAppText(map.get("appText"));
+            }
+            if (!StringUtils.isEmpty(map.get("logtime"))) {
+                sensor.setLogtime(map.get("logtime"));
+            } else {
+                sensor.setLogtime("2020-01-01 00:00:00");
             }
             sensor.setTel(k);
 
-            Collections.addAll(list,sensor);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Collections.addAll(list, sensor);
+            list.sort((s1,s2)->{
+                try {
+                    sdf.parse(s1.getLogtime()).compareTo(sdf.parse(s2.getLogtime()));
+                }catch (Exception e){
+                    return 0;
+                }
+                return 0;
+            });
         }
+
         return list;
     }
 

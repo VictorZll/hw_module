@@ -18,4 +18,5 @@ public class Sensor {
     private String version;
     private String tel;
     private String appText;
+    private String logtime;
 }

@@ -142,6 +142,7 @@ public class ServiceHandlerStr extends IoHandlerAdapter {
                 mapss.put("ServerIP",ServerIP);
                 mapss.put("tel",tel1);
                 mapss.put("appText",appText);
+                mapss.put("logtime",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 DeviceMap.newInstance().put(tel1 , mapss);//根据phone卡号判断
                 map.put(tel1,session);
                 SessionMap.newInstance().put(tel1 , map);//把接收数据的卡号作为key，并新建一个session
