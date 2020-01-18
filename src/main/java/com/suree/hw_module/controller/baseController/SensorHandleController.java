@@ -250,9 +250,27 @@ public class SensorHandleController {
     public Map<String,Object> setPort(@RequestParam(required = false)String port,@RequestParam(required = false)String tel, boolean set){
         String msg="";
         if(set){
-             msg="PORT"+port;
+            msg="PORT"+port;
         }else {
             msg="RPORT";
+        }
+        if(StringUtils.isEmpty(tel)){
+            handleData1(msg);
+        }else {
+            handleOneData1(tel,msg);
+        }
+        Map<String,Object> res=new HashMap<>();
+        res.put("status",1);
+        return res;
+    }
+
+    @RequestMapping("/typeHandle")
+    public Map<String,Object> setType(@RequestParam(required = false)String type,@RequestParam(required = false)String tel, boolean set){
+        String msg="";
+        if(set){
+            msg="TYPE"+type;
+        }else {
+            msg="RTYPE";
         }
         if(StringUtils.isEmpty(tel)){
             handleData1(msg);
