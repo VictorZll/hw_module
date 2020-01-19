@@ -54,6 +54,7 @@ public class SensorHandleController {
     }
     private void handleData1(String msg){
         Map<String, Map<String, IoSession>> stringMapMap = SessionMap.newInstance();
+        System.out.println( msg);
         for (String k:stringMapMap.keySet()){
             IoSession session=SessionMap.newInstance().get(k).get(k);
             StringBuilder msg1=new StringBuilder();
@@ -64,7 +65,7 @@ public class SensorHandleController {
                 msg1.append(Integer.toHexString(b)+" ");
             }
             msg1.substring(0,msg1.length()-1);
-            System.out.println( msg1.toString()+"msg1");
+
 
             if(session == null){
                 System.out.println("session为null");
