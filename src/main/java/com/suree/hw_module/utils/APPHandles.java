@@ -83,7 +83,7 @@ public class APPHandles {
         int n=0;
         int len=0;
         int lastLine=size%1024;
-        System.out.println("lastLine="+lastLine);
+//        System.out.println("lastLine="+lastLine);
         try {
             while ((len=in.read(b,0,b.length))!=-1){
 //                System.out.println();
@@ -93,23 +93,23 @@ public class APPHandles {
                 if(n==15){
                     res.add(sb.toString());
                     sb=new StringBuilder();
-                    System.out.println("开始分包");
+//                    System.out.println("开始分包");
                     for (int i=0;i<b.length;i++){
-                        System.out.print(intToHex((b[i]& 0xff))+" ");
+//                        System.out.print(intToHex((b[i]& 0xff))+" ");
                         sb.append(intToHex((b[i]& 0xff))+" ");
                     }
                 }else {
                     if(n==size/1024){
                         for (int i=0;i<b.length;i++){
                             if(i<lastLine){
-                                System.out.print(intToHex((b[i]& 0xff))+" ");
+//                                System.out.print(intToHex((b[i]& 0xff))+" ");
                                 sb.append(intToHex((b[i]& 0xff))+" ");
                             }
                         }
                     }else{
-                        System.out.println("b.length--->"+b.length);
+//                        System.out.println("b.length--->"+b.length);
                         for (int i=0;i<b.length;i++){
-                            System.out.print(intToHex((b[i]& 0xff))+" ");
+//                            System.out.print(intToHex((b[i]& 0xff))+" ");
                             sb.append(intToHex((b[i]& 0xff))+" ");
                         }
                     }
@@ -118,9 +118,9 @@ public class APPHandles {
                 n++;
 
             }
-            System.out.println("n--->"+n);
+//            System.out.println("n--->"+n);
             res.add(sb.toString());
-            System.out.println("分包完成");
+//            System.out.println("分包完成");
             if(in!=null){
                 in.close();
             }

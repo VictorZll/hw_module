@@ -27,7 +27,7 @@ public class SensorHandleController {
 
     private void sendApp( Object message,IoSession session){
 
-            System.out.println("反向发送消息到客户端Session---" + "----------APP=" + message);
+//            System.out.println("反向发送消息到客户端Session---" + "----------APP=" + message);
             if(session == null){
                 System.out.println("session为null");
                 return;
@@ -288,8 +288,8 @@ public class SensorHandleController {
             Part app = request.getPart("APP");
             List<String> list=APPHandles.readBinApp(app.getInputStream(),(int) app.getSize());
             System.out.println( app.getSize());
-            System.out.println("list"+list);
-            System.out.println("0"+list.get(0));
+//            System.out.println("list"+list);
+//            System.out.println("0"+list.get(0));
             for (int i=0;i<list.size();i++){
                 PackageMap.newInstance().put(i,list.get(i));
             }
